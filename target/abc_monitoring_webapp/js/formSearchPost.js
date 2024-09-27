@@ -6,10 +6,12 @@ const getSearchElement = async (url, shema, table, db) => {
 
   const searchParams = {
     selectedDropdown: selectedDropdown,
-    searchInput: searchInput,
+    searchInput: searchInput.toUpperCase(),
     shema: shema,
     table: table,
-    db: db
+    db: db,
+    page: currentPage,
+    pageSize: pageSize
   };
 
   console.log(searchParams);
@@ -38,7 +40,7 @@ const getSearchElement = async (url, shema, table, db) => {
     embededDbElement = `<h1 class="mt-5 text-center">Table not selected or not found</h1>`;           // A div container feltöltése HTML-lel   
   } else {
     responseData.forEach((data, index) => {               // Tömb iterálása
-    embededDbElement += htmlElement(data, index);
+    embededDbElement += getHtmlForDatabaseTable(data, index, currentDb, currentTable);
     });
   }
   }catch (error) {

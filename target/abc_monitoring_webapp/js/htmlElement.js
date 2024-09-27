@@ -32,12 +32,12 @@ const menu = [
             schema: "db2inst1",
             dbName: "MAPDB",
             tables: ["Z00RCPY1"]
-          }/* ,
+          },
           {
             schema: "db2inst1",
             dbName: "TESTDB2",
             tables: ["EMPLOYEE"]
-          } */
+          }
         ]
       }
     ]

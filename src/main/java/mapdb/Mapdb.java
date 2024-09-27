@@ -90,28 +90,48 @@ public class Mapdb implements DatabaseDAO {
     }
     
     @Override
-    public String searchDatabase(String selectedDropdown, String searchInput, String shema, String table, String db) {
-    	String sql = "SELECT * FROM " + shema + "." + table + " WHERE 1=1";
+    public String searchDatabase(String selectedDropdown, String searchInput, String shema, String table, String db, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        String sql = "SELECT * FROM " + shema + "." + table + " WHERE 1=1";
+        String countQuery = "SELECT COUNT(*) AS total FROM " + shema + "." + table + " WHERE 1=1";
         PreparedStatement stmt = null;
         ResultSet rs = null;
         JSONArray jsonArray = new JSONArray();
-    	
+        JSONObject resultObject = new JSONObject(); // Eredmény JSON objektum a visszaadásra
+        int totalItems = 0;
+
+        // Keresési feltételek hozzáadása az SQL lekérdezésekhez
         if (selectedDropdown != null && !selectedDropdown.isEmpty() && searchInput != null && !searchInput.isEmpty()) {
             sql += " AND " + selectedDropdown + " = ?";
+            countQuery += " AND " + selectedDropdown + " = ?";
         }
 
-        // Paraméterek hozzáadása PreparedStatement-ben
         try {
+            // Első lekérdezés: összes rekord számának lekérése
+            stmt = connection.prepareStatement(countQuery);
+            if (selectedDropdown != null && !selectedDropdown.isEmpty() && searchInput != null && !searchInput.isEmpty()) {
+                stmt.setString(1, searchInput);
+            }
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalItems = rs.getInt("total");
+            }
+            rs.close();
+            stmt.close();
+
+            // Második lekérdezés: lapozott adatok lekérése
+            sql += " LIMIT ? OFFSET ?";
             stmt = connection.prepareStatement(sql);
             int paramIndex = 1;
-
             if (selectedDropdown != null && !selectedDropdown.isEmpty() && searchInput != null && !searchInput.isEmpty()) {
                 stmt.setString(paramIndex++, searchInput);
             }
+            stmt.setInt(paramIndex++, pageSize);
+            stmt.setInt(paramIndex, offset);
 
             rs = stmt.executeQuery();
 
-            // Automatically iterate over ResultSet rows and put them in JSON
+            // ResultSet feldolgozása JSONArray-be
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
             while (rs.next()) {
@@ -123,6 +143,11 @@ public class Mapdb implements DatabaseDAO {
                 }
                 jsonArray.put(jsonObject);
             }
+
+            // Eredmény objektum feltöltése
+            resultObject.put("items", jsonArray); // Lapozott adatok
+            resultObject.put("totalItems", totalItems); // Összes rekord száma
+            resultObject.put("totalPages", Math.ceil((double) totalItems / pageSize));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,6 +167,6 @@ public class Mapdb implements DatabaseDAO {
             }
         }
 
-        return jsonArray.toString();
+        return resultObject.toString(); // Visszatérünk a lapozott adatokkal és az összes rekord számával
     }
 }

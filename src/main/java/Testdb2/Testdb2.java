@@ -90,7 +90,7 @@ public class Testdb2 implements DatabaseDAO{
 	}
 
 	@Override
-	public String searchDatabase(String selectedDropdown, String searchInput, String shema, String table, String db) {
+	public String searchDatabase(String selectedDropdown, String searchInput, String shema, String table, String db, int page, int pageSize) {
 		// TODO Auto-generated method stub
 		return null;
 	}

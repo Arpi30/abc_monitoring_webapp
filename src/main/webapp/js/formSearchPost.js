@@ -9,7 +9,9 @@ const getSearchElement = async (url, shema, table, db) => {
     searchInput: searchInput.toUpperCase(),
     shema: shema,
     table: table,
-    db: db
+    db: db,
+    page: currentPage,
+    pageSize: pageSize
   };
 
   console.log(searchParams);
@@ -37,14 +39,18 @@ const getSearchElement = async (url, shema, table, db) => {
   if (responseData.length === 0) {
     embededDbElement = `<h1 class="mt-5 text-center">Table not selected or not found</h1>`;           // A div container feltöltése HTML-lel   
   } else {
-    responseData.forEach((data, index) => {               // Tömb iterálása
-    embededDbElement += responseBody(data, index, currentDb);
+    responseData.items.forEach((data, index) => {               // Tömb iterálása
+    embededDbElement += getHtmlForDatabaseTable(data, index, currentDb, currentTable);
     });
   }
+  dbContainer.innerHTML = embededDbElement;             // A div container feltöltése HTML-lel
+  // Pagination megjelenítése
+  const paginationHTML = createPagination(responseData.totalPages, currentPage);
+  paginationContainer.innerHTML = paginationHTML; // Pagination elhelyezése a megfelelő containerben
+  
   }catch (error) {
     console.error("Hiba a küldés során:", error);
   }
-  dbContainer.innerHTML = embededDbElement;             // A div container feltöltése HTML-lel
 }
 
 form.addEventListener("submit", async (e) => {

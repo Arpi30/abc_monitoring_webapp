@@ -32,10 +32,13 @@ public class DbRouting {
     	String db = jsonObject.getString("db");
     	String searchInput = jsonObject.getString("searchInput");
     	String selectedDropdown = jsonObject.getString("selectedDropdown");
+    	int page = jsonObject.getInt("page");
+    	int pageSize = jsonObject.getInt("pageSize");
     	DbService dbService = new DbService(dbConfig);
     	
     	
-    	String searchDbData = dbService.searchDatabase(selectedDropdown, searchInput, shema, table, db);
+    	String searchDbData = dbService.searchDatabase(selectedDropdown, searchInput, shema, table, db, page, pageSize);
+    	System.out.println(searchDbData);
     	return Response.ok(searchDbData).build();
     }
 }

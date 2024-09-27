@@ -20,7 +20,7 @@ public class DbService {
     }
     
   //Keresési funkció
-    public String searchDatabase(String selectedDropdown, String searchInput, String shema, String table, String db) {
-    	return dbDAO.searchDatabase(selectedDropdown, searchInput, shema, table, db);
+    public String searchDatabase(String selectedDropdown, String searchInput, String shema, String table, String db, int page, int pageSize) {
+    	return dbDAO.searchDatabase(selectedDropdown, searchInput, shema, table, db, page, pageSize);
     }
 }

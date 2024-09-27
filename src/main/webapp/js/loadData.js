@@ -30,9 +30,7 @@ const paginatedData = async (url, clickedItem) => {
   };
 
 
-  if (spinnerFlag) {
-    dbContainer.innerHTML = spinner();
-  }
+  if (spinnerFlag)dbContainer.innerHTML = spinner();
 
   try {
     const response = await fetch(url, {
@@ -43,9 +41,7 @@ const paginatedData = async (url, clickedItem) => {
       body: JSON.stringify(dataToSend) // JSON formátumú adatok
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const responseData = await response.json();
     console.log(responseData);
@@ -58,7 +54,7 @@ const paginatedData = async (url, clickedItem) => {
           uniqueKeys.push(key);
         }
       });
-      embededDbElement += responseBody(data, index, currentDb);
+      embededDbElement += getHtmlForDatabaseTable(data, index, currentDb, currentTable);
     });
     dropdownContainer.innerHTML = searchBar(uniqueKeys)
     dbContainer.innerHTML = embededDbElement;             // A div container feltöltése HTML-lel

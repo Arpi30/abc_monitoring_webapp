@@ -1,7 +1,9 @@
-const responseBody = (data, index, dbName) => {
-
-  if (dbName === "MAPDB") {
-    return `
+// Eltároljuk a HTML struktúrát
+const htmlTemplates = {
+  // MAPDB adatbázis
+  "MAPDB": {
+    //Z00RCPY1 tábla
+    "Z00RCPY1": (data, index) => `
       <div class="accordion ms-3 my-1" id="accordion${index}">
         <div class="accordion-item">
           <h2 class="accordion-header" id="heading${index}">
@@ -54,10 +56,11 @@ const responseBody = (data, index, dbName) => {
         </div>
       </div>
     `
-  }
-
-  if (dbName === "TESTDB2") {
-    return `
+  },
+  // TESTDB2 adatbázis
+  "TESTDB2": {
+    // EMPLOYEE tábla
+    "EMPLOYEE": (data, index) =>`
       <table class="table">
         <tbody>
           <tr>
@@ -71,4 +74,13 @@ const responseBody = (data, index, dbName) => {
       </table>
     `
   }
+}
+
+// Meghívjuk a kiváalsztott HTML-t
+const getHtmlForDatabaseTable = (data, index, dbName, tableName) => {
+  const dbTables = htmlTemplates[dbName];
+  if (dbTables && dbTables[tableName]) {
+    return dbTables[tableName](data, index);
+  }
+  return '<div>Alapértelmezett HTML</div>';
 }

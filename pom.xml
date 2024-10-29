@@ -5,7 +5,25 @@
   <version>1.0</version>
   <name>abc_monitoring_webapp</name>
   <packaging>war</packaging>
+  <properties>
+    <tomcat.lib.path>C:/Program Files/Apache Software Foundation/Tomcat 9.0/lib</tomcat.lib.path>
+  </properties>
   <dependencies>
+    <dependency>
+	    <groupId>com.ibm.db2</groupId>
+	    <artifactId>jcc</artifactId>
+	    <version>db2jcc4_version</version>
+	    <scope>system</scope>
+	    <systemPath>${tomcat.lib.path}/db2jcc4.jar</systemPath>
+	</dependency>
+	<dependency>
+      <groupId>com.ibm.db2</groupId>
+      <artifactId>jcc-license-cisuz</artifactId>
+      <version>db2jcc_license_cisuz_version</version>
+      <scope>system</scope>
+      <systemPath>${tomcat.lib.path}/db2jcc_license_cisuz.jar</systemPath>
+    </dependency>
+
         <!-- JAX-RS API -->
         <dependency>
             <groupId>javax.ws.rs</groupId>

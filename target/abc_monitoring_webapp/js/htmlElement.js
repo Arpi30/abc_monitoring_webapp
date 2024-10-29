@@ -26,18 +26,18 @@ const menu = [
     lpar: "SY27",
     subsystems: [
       {
-        name: "D4ES",
+        name: "DSE4",
         databases: [
           {
-            schema: "db2inst1",
+            schema: "D$PZ00",
             dbName: "MAPDB",
             tables: ["Z00RCPY1"]
           },
-          {
+          /* {
             schema: "db2inst1",
             dbName: "TESTDB2",
             tables: ["EMPLOYEE"]
-          }
+          } */
         ]
       }
     ]

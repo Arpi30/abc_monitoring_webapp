@@ -29,6 +29,9 @@ const paginatedData = async (url, clickedItem) => {
     pageSize: pageSize
   };
 
+  console.log(dataToSend);
+  
+
 
   if (spinnerFlag)dbContainer.innerHTML = spinner();
 

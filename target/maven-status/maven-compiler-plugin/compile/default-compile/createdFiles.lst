@@ -1,8 +1,0 @@
-Testdb2\Testdb2.class
-abc_monitoring_webapp\DbService.class
-abc_monitoring_webapp\DbRouting.class
-mapdb\Mapdb.class
-abc_monitoring_webapp\Cors_filter.class
-abc_monitoring_webapp\DatabaseDAO.class
-abc_monitoring_webapp\DbDAOFactory.class
-abc_monitoring_webapp\ConnectionFactory.class

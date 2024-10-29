@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans+Elbasan&display=swap');
 body {
     box-sizing: border-box;
     font-family: "Russo One", sans-serif;
+
 }
 
 a {
@@ -134,7 +136,17 @@ a.sidebar-link:hover {
 
 .title{
     color: #e30074;
-    text-decoration: underline;
+    font-family: "Arimo", sans-serif;
+    position: relative;
+    font-size: 1.75rem;
+}
+.title::after{
+    content: "Monitoring";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(0%, 10%);
+    font-size: 12px;
 }
 .welcomeTextWrapper{
     background-color: #FFFFFF;

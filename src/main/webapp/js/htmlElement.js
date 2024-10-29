@@ -1,4 +1,4 @@
-let pageSize = 5;
+let pageSize = 40;
 let currentPage = 1;
 const list = "http://localhost:8080/abc_monitoring_webapp/db/list";
 const search = "http://localhost:8080/abc_monitoring_webapp/db/search";
@@ -10,6 +10,7 @@ const logo = document.getElementById("logo");
 const paginationContainer = document.getElementById("paginationContainer");
 const hamBurger = document.querySelector(".toggle-btn");
 const menulist = document.getElementById("sidebar");
+const sidebarLinks = document.getElementsByClassName("sidebar-link")
 const dbContainer = document.getElementById("dbContainer");
 const dbTitle = document.getElementById("dbTitle");
 const pagination = document.querySelector('.pagination');
@@ -26,18 +27,18 @@ const menu = [
     lpar: "SY27",
     subsystems: [
       {
-        name: "D4ES",
+        name: "DSE4",
         databases: [
           {
-            schema: "db2inst1",
+            schema: "D$PZ00",
             dbName: "MAPDB",
             tables: ["Z00RCPY1"]
           },
-          {
+          /* {
             schema: "db2inst1",
             dbName: "TESTDB2",
             tables: ["EMPLOYEE"]
-          }
+          } */
         ]
       }
     ]

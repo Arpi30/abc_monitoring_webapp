@@ -104,7 +104,7 @@ const searchBar = (uniqueKeys) => {
 
 const getDbTitle = (schema, table) => {
 	return `
-		<h3 class="m-0 bg-light bg-gradient rounded d-inline p-2">${schema}.${table} Table</h3>
+		<h3 class="m-0 bg-light bg-gradient rounded d-inline px-2">${schema}.${table} Table</h3>
 	`
 }
 
@@ -120,15 +120,40 @@ const spinner = () => {
 
 const createPagination = (totalPages, currentPage) => {
   let paginationHTML = '<nav aria-label="Page navigation example"><ul class="pagination">';
-  
+
+  // Előző oldal gomb
   paginationHTML += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a></li>`;
-  
-  for (let i = 1; i <= totalPages; i++) {
+
+  // Az első 5 oldal
+  for (let i = 1; i <= Math.min(5, totalPages); i++) {
     paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
   }
-  
+
+  // Pontok a köztes oldalak jelzésére, ha az aktuális oldal túl van az 5. oldalon
+  if (currentPage > 5 && currentPage <= totalPages - 2) {
+    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+  }
+
+  // Az aktuális oldal és a környező oldalak dinamikus megjelenítése, ha az aktuális oldal több mint 5
+  const start = Math.max(6, currentPage - 1);
+  const end = Math.min(totalPages - 2, currentPage + 1);
+  for (let i = start; i <= end; i++) {
+    paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  // Pontok az utolsó két oldal előtt
+  if (currentPage < totalPages - 2 && end < totalPages - 2) {
+    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+  }
+
+  // Az utolsó két oldal
+  for (let i = Math.max(totalPages - 1, 6); i <= totalPages; i++) {
+    paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  // Következő oldal gomb
   paginationHTML += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage + 1}">Next</a></li>`;
   paginationHTML += '</ul></nav>';
-  
+
   return paginationHTML;
 };

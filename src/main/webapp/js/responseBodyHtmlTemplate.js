@@ -8,7 +8,7 @@ const htmlTemplates = {
         <div class="accordion-item">
           <h2 class="accordion-header" id="heading${index}">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
-                  ${data.RECA_NET + formatDate(data.RECA_TIME)}
+                  ${data.NUMBER}
               </button>
           </h2>
           <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#accordion${index}">
@@ -19,7 +19,7 @@ const htmlTemplates = {
                       <div class= "d-flex flex-row my-3 justify-content-evenly">
                         <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Number:</span> <span class="fw-bold">${data.NUMBER}</span></span>
                         <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Recall Status:</span> <span class="fw-bold">${data.RECA_STATUS}</span></span>
-                        <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Recall Time:</span> <span class="fw-bold">${formatDate(data.RECA_TIME)}</span></span>
+                        <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Recall Time:</span> <span class="fw-bold">${data.RECA_TIME}</span></span>
                       </div>
                       <div class="progress my-3">
                         <div class="progress-bar bg-${progressbarColor(data.RECA_STATUS)}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -31,7 +31,7 @@ const htmlTemplates = {
                       <div class= "d-flex flex-row my-3 justify-content-evenly">
                         <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 1 Status:</span> <span class="fw-bold">${data.CPY1_STATUS}</span></span>
                         <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 1 Net:</span> <span class="fw-bold">${data.CPY1_NET}</span></span>
-                        <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 1 Time:</span> <span class="fw-bold">${formatDate(data.CPY1_TIME)}</span></span>
+                        <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 1 Time:</span> <span class="fw-bold">${data.CPY1_TIME}</span></span>
                       </div>
                       <div class="progress my-3">
                         <div class="progress-bar bg-${progressbarColor(data.CPY1_STATUS)}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -43,7 +43,7 @@ const htmlTemplates = {
                       <div class= "d-flex flex-row my-3 justify-content-evenly">
                         <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 2 Status:</span> <span class="fw-bold">${data.CPY2_STATUS}</span></span>
                         <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 2 Net:</span> <span class="fw-bold">${data.CPY2_NET}</span></span>
-                        <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 2 Time:</span> <span class="fw-bold">${formatDate(data.CPY2_TIME)}</span></span>
+                        <span class="fs-4"><span class="bg-light bg-gradient p-2 rounded">Copy 2 Time:</span> <span class="fw-bold">${data.CPY2_TIME}</span></span>
                       </div>
                       <div class="progress my-3">
                         <div class="progress-bar bg-${progressbarColor(data.CPY2_STATUS)}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>

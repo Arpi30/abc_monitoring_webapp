@@ -1,6 +1,7 @@
 const getSearchElement = async (url, shema, table, db) => {
   const selectedDropdown = document.getElementById("selectedDropdown").value
-  const searchInput = document.getElementById("searchInput").value;
+  const searchInputElement = document.getElementById("searchInput");
+  const searchInput = searchInputElement.value;
   spinnerFlag = true
   let embededDbElement = '';                     // Üres változó a HTML-nek
 
@@ -47,12 +48,12 @@ const getSearchElement = async (url, shema, table, db) => {
   // Pagination megjelenítése
   const paginationHTML = createPagination(responseData.totalPages, currentPage);
   paginationContainer.innerHTML = paginationHTML; // Pagination elhelyezése a megfelelő containerben
+
+  searchInputElement.value = "";
   
   }catch (error) {
     console.error("Hiba a küldés során:", error);
   }
-  selectedDropdown.value = '';
-  searchInput.value = '';
 }
 
 form.addEventListener("submit", async (e) => {

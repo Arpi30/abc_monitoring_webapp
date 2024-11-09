@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans+Elbasan&display=swap');
 body {
     box-sizing: border-box;
     font-family: "Russo One", sans-serif;
@@ -134,7 +135,17 @@ a.sidebar-link:hover {
 
 .title{
     color: #e30074;
-    text-decoration: underline;
+    font-family: "Arimo", sans-serif;
+    position: relative;
+    font-size: 1.75rem;
+}
+.title::after{
+    content: "Monitoring";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(0%, 10%);
+    font-size: 12px;
 }
 .welcomeTextWrapper{
     background-color: #FFFFFF;
@@ -190,4 +201,45 @@ a.sidebar-link:hover {
 
 .srcButton{
     background-color: #e30074 !important;
+}
+
+.mapdbStaticData{
+    position: absolute;
+    left: 0;
+    top: 50px;
+}
+.progress[class*="status"]{
+    width: 100%;
+}
+.status-group{
+    width: 30%;
+}
+#progressbarContainer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.reca-circle{
+    width: 5px;
+    height: 5px;
+    background: green;
+    border-radius: 50%;
+}
+
+.status-label{
+    position: relative;
+    cursor: pointer;
+}
+.status-label:hover::after{
+    content: attr(data-info);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 10;
 }

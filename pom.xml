@@ -5,10 +5,14 @@
   <version>1.0</version>
   <name>abc_monitoring_webapp</name>
   <packaging>war</packaging>
+  
+  <!-- If the app hosten on websphare server then these parameters will be unuseful -->
   <properties>
     <tomcat.lib.path>C:/Program Files/Apache Software Foundation/Tomcat 9.0/lib</tomcat.lib.path>
   </properties>
   <dependencies>
+	  
+	<!-- If the app hosten on websphare server then these parameters will be unuseful -->
     <dependency>
 	    <groupId>com.ibm.db2</groupId>
 	    <artifactId>jcc</artifactId>
@@ -23,13 +27,7 @@
       <scope>system</scope>
       <systemPath>${tomcat.lib.path}/db2jcc_license_cisuz.jar</systemPath>
     </dependency>
-
-        <!-- JAX-RS API -->
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
+	<!-- ............................................................................ -->
         <!-- Jersey Server Implementation -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -41,6 +39,12 @@
             <artifactId>jersey-container-servlet-core</artifactId>
             <version>2.39</version>
         </dependency>
+        <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>4.0.1</version> <!-- vagy választhatsz egy újabb verziót, ha szükséges -->
+		    <scope>provided</scope>
+		</dependency>
         <!-- JSON Processing -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>

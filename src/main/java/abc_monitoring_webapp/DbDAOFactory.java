@@ -1,21 +1,21 @@
 package abc_monitoring_webapp;
 
 import java.sql.SQLException;
-
-import Testdb2.Testdb2;
+import javax.sql.DataSource;
 import mapdb.Mapdb;
 
 public class DbDAOFactory {
-	//building a connection via the properties file
-    public static DatabaseDAO getDatabaseDAO(String dbConfig) throws SQLException {
-    	System.out.println("DbDAOFactory: " + dbConfig);
-    	// with else statement can add more database connection
-        if (dbConfig.equals("MAPDB.properties")) {											
-            return new Mapdb(dbConfig);
-        }else if(dbConfig.equals("TESTDB2.properties")) {
-        	return new Testdb2(dbConfig);
+	//Building the connection via Datasource
+    public static DatabaseDAO getDatabaseDAO(String jndiName) throws SQLException {
+        System.out.println("DbDAOFactory: " + jndiName);
+        
+        DataSource dataSource = ConnectionFactory.getDataSource(jndiName);
+        //Specify the jndiName data source. We can add a new data source with else if statement.
+        if ("jdbc/sy27conn.db".equals(jndiName)) {
+        	System.out.println("DbDAOFactory: Mapdb database identification with Data source => jdbc/sy27conn.db");
+            return new Mapdb(dataSource);
         } else {
-            throw new IllegalArgumentException("Unknown database config: " + dbConfig);
+            throw new IllegalArgumentException("Unknown JNDI name: " + jndiName);
         }
     }
 }

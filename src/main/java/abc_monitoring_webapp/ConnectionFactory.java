@@ -1,63 +1,29 @@
 package abc_monitoring_webapp;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
-import java.io.InputStream;
-import java.io.IOException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 
 public class ConnectionFactory {
 
-    public static Connection createConnection(String dbConfig) throws SQLException {
-    	System.out.println("ConnectionFactory: " + dbConfig);
-        Properties props = new Properties();
-        try (InputStream input = ConnectionFactory.class.getClassLoader().getResourceAsStream(dbConfig)) {
-            if (input == null) {
-                throw new IllegalArgumentException("Sorry, unable to find " + dbConfig);
-            }
-            // Töltsük be a properties fájlt
-            // Load the prop files
-            props.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new SQLException("Unable to load database properties file: " + dbConfig, e);
-        }
-        //Get the properties parameters from the properties file
-        String url = props.getProperty("db.url");
-        String username = props.getProperty("db.user");
-        String password = props.getProperty("db.password");
-        String driver = props.getProperty("db.driver");
-        String sslpath = props.getProperty("db.sslpath");
-        String sslpass = props.getProperty("db.sslpass");
-        
-
-        System.out.println(url);
+    public static DataSource getDataSource(String jndiName) throws SQLException {
+    	//Create a new Context and looking up for a jndiName Datasource
         try {
-            // Load JDBC driver
-            Class.forName(driver);
-            System.out.println("ConnectionFactory: **** Loaded the JDBC driver");
-            
-            Properties connectionProps = new Properties();
-            connectionProps.put("user", username);
-            connectionProps.put("password", password);
-            connectionProps.put("sslConnection", "true");
-            connectionProps.put("sslTrustStoreLocation", sslpath);
-            connectionProps.put("sslTrustStorePassword", sslpass);
+            InitialContext ctx = new InitialContext();
+            System.out.println("Attempting to look up JNDI DataSource with name: " + jndiName);
+            //Need to use on localhost
+            //DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/" + jndiName);
+            //Need to use when the APP hosten on websphere
+            DataSource dataSource = (DataSource) ctx.lookup(jndiName);
+            System.out.println("JNDI lookup successful for: " + jndiName);
 
-            // display properties
-            System.getProperties().list(System.out);
-            
-            // Adatbázis kapcsolat létrehozása a DriverManager-en keresztül
-            //Create the Database connection via Drivermanager
-            return DriverManager.getConnection(url, connectionProps);
-        } catch (ClassNotFoundException e) {
+            return dataSource;
+          //By the problem throw sqlexpetion
+        } catch (NamingException e) {
             e.printStackTrace();
-            throw new SQLException("JDBC Driver not found: " + driver, e);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e; // Továbbdobás, ha probléma lép fel a kapcsolat létrehozásakor
-            		 //By the problem throw sqlexpetion	
+            throw new SQLException("Error in looking up JNDI DataSource: " + jndiName, e);
         }
     }
 }

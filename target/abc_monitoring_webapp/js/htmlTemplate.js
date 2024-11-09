@@ -1,15 +1,4 @@
-const formatDate = (dateStr) => {
-  // Szétvágjuk a dátum stringet a megfelelő részekre
-  const year = "20" + dateStr.substring(0, 2); // év
-  const month = dateStr.substring(2, 4);       // hónap
-  const day = dateStr.substring(4, 6);         // nap
-  const hour = dateStr.substring(6, 8);        // óra
-  const minute = dateStr.substring(8, 10);     // perc
-
-  // Formázott dátum visszaadása
-  return `${year}.${month}.${day} ${hour}:${minute}`;
-}
-
+//Coloring the progressbar in the row of response
 const progressbarColor = (data) => {
 	switch (data) {
 		case "WORK":
@@ -23,27 +12,93 @@ const progressbarColor = (data) => {
 	}
 }
 
+//Making static progressbar with Mapdb datas
+const staticData = (data) => {
+  let statusData = data["statusCounts"]
+  //Return the row status and calculating the percentage progressbar width propertie
+  const getStatusWidth = (statusType, statusKey) => {
+    const total = statusData[statusType].DONE + statusData[statusType].WORK + statusData[statusType].ERR;
+    return total === 0 ? 0 : Math.round((statusData[statusType][statusKey] / total) * 100);
+  };
+  //Get the number of status via responsed data keys
+  const getStatusLabel = (statusType, statusKey) => {
+    return statusData[statusType][statusKey] || 0;
+  };
+
+  return `
+    <div id="progressbarContainer">
+      <div class="status-group">
+        <div class="status-label" data-info="DONE: ${getStatusLabel("RECA_STATUS", "DONE")}, WORK: ${getStatusLabel("RECA_STATUS", "WORK")}, ERR: ${getStatusLabel("RECA_STATUS", "ERR")}">Recall Status</div>
+        <div class="progress RECA_STATUS">
+          <div class="progress-bar bg-success" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100">
+            DONE: ${getStatusLabel("RECA_STATUS", "DONE")}
+          </div>
+          <div class="progress-bar bg-warning" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100">
+            WORK: ${getStatusLabel("RECA_STATUS", "WORK")}
+          </div>
+          <div class="progress-bar bg-danger" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100">
+            ERR: ${getStatusLabel("RECA_STATUS", "ERR")}
+          </div>
+        </div>
+      </div>
+
+      <div class="status-group">
+        <div class="status-label" data-info="DONE: ${getStatusLabel("CPY1_STATUS", "DONE")}, WORK: ${getStatusLabel("CPY1_STATUS", "WORK")}, ERR: ${getStatusLabel("CPY1_STATUS", "ERR")}">Copy1 Status</div>
+        <div class="progress CPY1_STATUS">
+          <div class="progress-bar bg-success" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100">
+            DONE: ${getStatusLabel("CPY1_STATUS", "DONE")}
+          </div>
+          <div class="progress-bar bg-warning" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100">
+            WORK: ${getStatusLabel("CPY1_STATUS", "WORK")}
+          </div>
+          <div class="progress-bar bg-danger" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100">
+            ERR: ${getStatusLabel("CPY1_STATUS", "ERR")}
+          </div>
+        </div>
+      </div>
+
+      <div class="status-group">
+        <div class="status-label" data-info="DONE: ${getStatusLabel("CPY2_STATUS", "DONE")}, WORK: ${getStatusLabel("CPY2_STATUS", "WORK")}, ERR: ${getStatusLabel("CPY2_STATUS", "ERR")}">Copy2 Status</div>
+        <div class="progress CPY2_STATUS">
+          <div class="progress-bar bg-success" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100">
+            DONE: ${getStatusLabel("CPY2_STATUS", "DONE")}
+          </div>
+          <div class="progress-bar bg-warning" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100">
+            WORK: ${getStatusLabel("CPY2_STATUS", "WORK")}
+          </div>
+          <div class="progress-bar bg-danger" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100">
+            ERR: ${getStatusLabel("CPY2_STATUS", "ERR")}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+};
 
 
-// HTML elem generálása a menü és adatbázis adatai alapján
+//Generate HTML element based on menu and database data
 const menuElement = (data, index) => {
-  const lparId = `lpar-${index}`; // Egyedi azonosító az lpar számára
+  //Unique identifier for the LPAR
+  const lparId = `lpar-${index}`;
 
-  // Minden subsystem megjelenítése
+  //Show all subsystems
   const subsystems = data.subsystems.map((subsystem, subsystemIndex) => {
-    const subsystemId = `subsystem-${index}-${subsystemIndex}`; // Egyedi azonosító a subsystem számára
+    //Unique identifier for the subsystem
+    const subsystemId = `subsystem-${index}-${subsystemIndex}`; 
 
-    // Minden adatbázis és tábla megjelenítése a subsystem-en belül
+    //Display all databases and tables within the subsystem
     const databases = subsystem.databases.map((db, dbIndex) => {
-      const dbId = `db-${index}-${subsystemIndex}-${dbIndex}`; // Egyedi azonosító az adatbázis számára
-      const schemaId = `schema-${index}-${subsystemIndex}-${dbIndex}`; // Egyedi azonosító a schema számára
+      //Unique identifier for the database
+      const dbId = `db-${index}-${subsystemIndex}-${dbIndex}`;
+      //Unique identifier for the shema
+      const schemaId = `schema-${index}-${subsystemIndex}-${dbIndex}`;
 
-      // Minden táblázat megjelenítése
+      //Show all tables
       const tables = db.tables.map((table, tableIndex) => {
         return `
           <li class="sidebar-item">
             <a href="#" class="sidebar-link">
-              <span class="clickable" data-db="${db.dbName}" data-table="${table}" data-schema="${db.schema}" value="${table}">${table}</span>
+              <span class="clickable" data-db="${db.dbName}" data-table="${table}" data-schema="${db.schema}" data-jndiName="${db.jndiName}" value="${table}">${table}</span>
             </a>
           </li>`;
       }).join('');
@@ -88,26 +143,24 @@ const menuElement = (data, index) => {
   `;
 };
 
-// Dinamikus keresési mező, ami dropdownként funkcionál
+//Dynamic search field that acts as a dropdown
 const searchBar = (uniqueKeys) => {
   let dropdownHTML = '<select class="form-select" id="selectedDropdown" aria-label="Dynamic Dropdown">';
   
   uniqueKeys.forEach(key => {
     dropdownHTML += `<option value="${key}">${key}</option>`;
   });
-  
   dropdownHTML += '</select>';
-  
-  return dropdownHTML; // Visszatérési érték: dropdown HTML szerkezete
+  //Return value: dropdown HTML structure
+  return dropdownHTML;
 };
-
-
+//Making the dynamic Title of database and table
 const getDbTitle = (schema, table) => {
 	return `
-		<h3 class="m-0 bg-light bg-gradient rounded d-inline p-2">${schema}.${table} Table</h3>
+		<h3 class="m-0 bg-light bg-gradient rounded d-inline px-2">${schema}.${table} Table</h3>
 	`
 }
-
+//Making the spinner HTML
 const spinner = () => {
 	return `
 		<div class="d-flex justify-content-center">
@@ -117,18 +170,43 @@ const spinner = () => {
 		</div>
 	`
 }
-
+  //Create Pagination HTML with the page parameters
 const createPagination = (totalPages, currentPage) => {
   let paginationHTML = '<nav aria-label="Page navigation example"><ul class="pagination">';
-  
+
+  //Previous button
   paginationHTML += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a></li>`;
-  
-  for (let i = 1; i <= totalPages; i++) {
+
+  //The first 5 page
+  for (let i = 1; i <= Math.min(5, totalPages); i++) {
     paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
   }
-  
+
+  //Points to indicate intermediate pages if the current page is beyond page 5
+  if (currentPage > 5 && currentPage <= totalPages - 2) {
+    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+  }
+
+  //Dynamic display of the current page and surrounding pages if the current page is more than 5
+  const start = Math.max(6, currentPage - 1);
+  const end = Math.min(totalPages - 2, currentPage + 1);
+  for (let i = start; i <= end; i++) {
+    paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  //Points before the last two pages
+  if (currentPage < totalPages - 2 && end < totalPages - 2) {
+    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+  }
+
+  //The last 2 pages
+  for (let i = Math.max(totalPages - 1, 6); i <= totalPages; i++) {
+    paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  //Next button
   paginationHTML += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage + 1}">Next</a></li>`;
   paginationHTML += '</ul></nav>';
-  
+
   return paginationHTML;
 };

@@ -10,8 +10,8 @@ let currentPage = 1;
 //const list = "http://localhost:8080/abc_monitoring_webapp/api/db/list";
 //const search = "http://localhost:8080/abc_monitoring_webapp/api/db/search";
 //Websphere endpoints
-const list = "https://53.113.100.157/abc_monitoring_webapp/api/db/list";
-const search = "https://53.113.100.157/abc_monitoring_webapp/api/db/search";
+const list = "http://w3xzea1.mf.corpintra.net/abc_monitoring_webapp/api/db/list";
+const search = "http://w3xzea1.mf.corpintra.net/abc_monitoring_webapp/api/db/search";
 
 //-----------------------------------------------------------------------------------//
 //Selected HTML tags

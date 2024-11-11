@@ -1,23 +1,27 @@
 //Coloring the progressbar in the row of response
 const progressbarColor = (data) => {
-	switch (data) {
-		case "WORK":
-			return "info"
-		case "WAIT":
-			return "warning"
-		case "ERR ":
-			return "danger"
-		default:
-			return "success"
-	}
-}
+  switch (data) {
+    case 'TBD ':
+      return 'secondary';
+    case 'WORK':
+      return 'info';
+    case 'ERR ':
+      return 'danger';
+    default:
+      return 'success';
+  }
+};
 
 //Making static progressbar with Mapdb datas
 const staticData = (data) => {
   let statusData = data["statusCounts"]
   //Return the row status and calculating the percentage progressbar width propertie
   const getStatusWidth = (statusType, statusKey) => {
-    const total = statusData[statusType].DONE + statusData[statusType].WORK + statusData[statusType].ERR;
+    const total =
+      statusData[statusType].TBD +
+      statusData[statusType].DONE +
+      statusData[statusType].WORK +
+      statusData[statusType].ERR;
     return total === 0 ? 0 : Math.round((statusData[statusType][statusKey] / total) * 100);
   };
   //Get the number of status via responsed data keys
@@ -28,47 +32,32 @@ const staticData = (data) => {
   return `
     <div id="progressbarContainer">
       <div class="status-group">
-        <div class="status-label" data-info="DONE: ${getStatusLabel("RECA_STATUS", "DONE")}, WORK: ${getStatusLabel("RECA_STATUS", "WORK")}, ERR: ${getStatusLabel("RECA_STATUS", "ERR")}">Recall Status</div>
+        <div class="status-label" data-info="TBD: ${getStatusLabel("CPY1_STATUS", "TBD")}, DONE: ${getStatusLabel("RECA_STATUS", "DONE")}, WORK: ${getStatusLabel("RECA_STATUS", "WORK")}, ERR: ${getStatusLabel("RECA_STATUS", "ERR")}">Recall Status</div>
         <div class="progress RECA_STATUS">
-          <div class="progress-bar bg-success" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100">
-            DONE: ${getStatusLabel("RECA_STATUS", "DONE")}
-          </div>
-          <div class="progress-bar bg-warning" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100">
-            WORK: ${getStatusLabel("RECA_STATUS", "WORK")}
-          </div>
-          <div class="progress-bar bg-danger" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100">
-            ERR: ${getStatusLabel("RECA_STATUS", "ERR")}
-          </div>
+          <div class="progress-bar bg-${progressbarColor('TBD ')}" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "TBD")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "TBD")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('DONE')}" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('WORK')}" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('ERR ')}" role="progressbar" style="width: ${getStatusWidth("RECA_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("RECA_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
       </div>
 
       <div class="status-group">
-        <div class="status-label" data-info="DONE: ${getStatusLabel("CPY1_STATUS", "DONE")}, WORK: ${getStatusLabel("CPY1_STATUS", "WORK")}, ERR: ${getStatusLabel("CPY1_STATUS", "ERR")}">Copy1 Status</div>
+        <div class="status-label" data-info="TBD: ${getStatusLabel("CPY1_STATUS", "TBD")}, DONE: ${getStatusLabel("CPY1_STATUS", "DONE")}, WORK: ${getStatusLabel("CPY1_STATUS", "WORK")}, ERR: ${getStatusLabel("CPY1_STATUS", "ERR ")}">Copy1 Status</div>
         <div class="progress CPY1_STATUS">
-          <div class="progress-bar bg-success" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100">
-            DONE: ${getStatusLabel("CPY1_STATUS", "DONE")}
-          </div>
-          <div class="progress-bar bg-warning" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100">
-            WORK: ${getStatusLabel("CPY1_STATUS", "WORK")}
-          </div>
-          <div class="progress-bar bg-danger" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100">
-            ERR: ${getStatusLabel("CPY1_STATUS", "ERR")}
-          </div>
+          <div class="progress-bar bg-${progressbarColor('TBD ')}" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "TBD")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "TBD")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('DONE')}" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('WORK')}" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('ERR ')}" role="progressbar" style="width: ${getStatusWidth("CPY1_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("CPY1_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
       </div>
 
       <div class="status-group">
-        <div class="status-label" data-info="DONE: ${getStatusLabel("CPY2_STATUS", "DONE")}, WORK: ${getStatusLabel("CPY2_STATUS", "WORK")}, ERR: ${getStatusLabel("CPY2_STATUS", "ERR")}">Copy2 Status</div>
+        <div class="status-label" data-info="TBD: ${getStatusLabel("CPY1_STATUS", "TBD")}, DONE: ${getStatusLabel("CPY2_STATUS", "DONE")}, WORK: ${getStatusLabel("CPY2_STATUS", "WORK")}, ERR: ${getStatusLabel("CPY2_STATUS", "ERR ")}">Copy2 Status</div>
         <div class="progress CPY2_STATUS">
-          <div class="progress-bar bg-success" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100">
-            DONE: ${getStatusLabel("CPY2_STATUS", "DONE")}
-          </div>
-          <div class="progress-bar bg-warning" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100">
-            WORK: ${getStatusLabel("CPY2_STATUS", "WORK")}
-          </div>
-          <div class="progress-bar bg-danger" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100">
-            ERR: ${getStatusLabel("CPY2_STATUS", "ERR")}
-          </div>
+          <div class="progress-bar bg-${progressbarColor('TBD ')}" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "TBD")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "TBD")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('DONE')}" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "DONE")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "DONE")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('WORK')}" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "WORK")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "WORK")}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-${progressbarColor('ERR ')}" role="progressbar" style="width: ${getStatusWidth("CPY2_STATUS", "ERR")}%;" aria-valuenow="${getStatusWidth("CPY2_STATUS", "ERR")}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
       </div>
     </div>

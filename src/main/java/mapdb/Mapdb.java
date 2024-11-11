@@ -30,12 +30,15 @@ public class Mapdb implements DatabaseDAO {
         String countQuery = "SELECT COUNT(*) AS total FROM " + dbShema + "." + tableName;
         // Query for counting statuses across the entire table
         String statusCountQuery = "SELECT "
+                + "SUM(CASE WHEN RECA_STATUS = 'TBD' THEN 1 ELSE 0 END) AS recaTbdCount, "
                 + "SUM(CASE WHEN RECA_STATUS = 'DONE' THEN 1 ELSE 0 END) AS recaDoneCount, "
                 + "SUM(CASE WHEN RECA_STATUS = 'WORK' THEN 1 ELSE 0 END) AS recaWorkCount, "
                 + "SUM(CASE WHEN RECA_STATUS = 'ERR' THEN 1 ELSE 0 END) AS recaErrCount, "
+                + "SUM(CASE WHEN CPY1_STATUS = 'TBD' THEN 1 ELSE 0 END) AS copy1TbdCount, "
                 + "SUM(CASE WHEN CPY1_STATUS = 'DONE' THEN 1 ELSE 0 END) AS copy1DoneCount, "
                 + "SUM(CASE WHEN CPY1_STATUS = 'WORK' THEN 1 ELSE 0 END) AS copy1WorkCount, "
                 + "SUM(CASE WHEN CPY1_STATUS = 'ERR' THEN 1 ELSE 0 END) AS copy1ErrCount, "
+                + "SUM(CASE WHEN CPY2_STATUS = 'TBD' THEN 1 ELSE 0 END) AS copy2TbdCount, "
                 + "SUM(CASE WHEN CPY2_STATUS = 'DONE' THEN 1 ELSE 0 END) AS copy2DoneCount, "
                 + "SUM(CASE WHEN CPY2_STATUS = 'WORK' THEN 1 ELSE 0 END) AS copy2WorkCount, "
                 + "SUM(CASE WHEN CPY2_STATUS = 'ERR' THEN 1 ELSE 0 END) AS copy2ErrCount "
@@ -64,14 +67,17 @@ public class Mapdb implements DatabaseDAO {
                 if (rsStatus.next()) {
                     JSONObject statusCounts = new JSONObject();
                     statusCounts.put("RECA_STATUS", new JSONObject()
+                            .put("TBD", rsStatus.getInt("recaTbdCount"))
                             .put("DONE", rsStatus.getInt("recaDoneCount"))
                             .put("WORK", rsStatus.getInt("recaWorkCount"))
                             .put("ERR", rsStatus.getInt("recaErrCount")));
                     statusCounts.put("CPY1_STATUS", new JSONObject()
+                            .put("TBD", rsStatus.getInt("copy1TbdCount"))
                             .put("DONE", rsStatus.getInt("copy1DoneCount"))
                             .put("WORK", rsStatus.getInt("copy1WorkCount"))
                             .put("ERR", rsStatus.getInt("copy1ErrCount")));
                     statusCounts.put("CPY2_STATUS", new JSONObject()
+                            .put("TBD", rsStatus.getInt("copy2TbdCount"))
                             .put("DONE", rsStatus.getInt("copy2DoneCount"))
                             .put("WORK", rsStatus.getInt("copy2WorkCount"))
                             .put("ERR", rsStatus.getInt("copy2ErrCount")));

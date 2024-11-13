@@ -1,0 +1,15 @@
+/* pagination.css */
+.pagination{
+    margin-top: 10px;
+}
+.pagination .page-item.active .page-link {
+    background-color: #e30074 !important;
+    color: white !important;
+    border-color: #e30074 !important;
+  }
+  
+  .pagination .page-item .page-link {
+    background-color: #f8f9fa;
+    color: black;
+    border-color: #dee2e6;
+  }

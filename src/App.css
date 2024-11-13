@@ -1,38 +1,72 @@
 .App {
   text-align: center;
+  height: 100vh;
+}
+/*Elcome Text*/
+.welcomeTextWrapper{
+  background-color: #FFFFFF;
+  position: relative;
+}
+.welcomeTextWrapper svg{
+  width: 100%;
+}
+.welcomeText{
+  position: absolute;
+  font-weight: 600;
+  font-size: 4rem;
+  animation: stroke 5s infinite alternate;
+  stroke: #e30074;
+  fill: #e30074;
+}
+@keyframes stroke {
+	0%   {
+		fill: rgba(238,90,252,0); stroke: #e30074;
+		stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 2;
+	}
+	70%  {fill: rgba(238,90,252,0); stroke: #e30074; }
+	80%  {fill: rgba(238,90,252,0); stroke: #e30074; stroke-width: 3; }
+	100% {
+		fill: #e30074; stroke: rgba(238,90,252,0);
+		stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
+	}
+}
+/*Sidebar css*/
+.custom-sidebar .offcanvas {
+  background-color: #e30074; /* Magenta szín a sidebarhoz */
+  width: 200px !important; /* 200px széles */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navbar, .custom-sidebar .offcanvas-body, .custom-sidebar .offcanvas-header {
+  background-color: #e30074;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.custom-sidebar .offcanvas-title {
+  color: white; /* Fehér szín a címhez */
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.sidebar-item button{
   color: white;
+  text-decoration: none;
+  width: 100%;
+  text-align: justify;
+}
+.sidebar-item button:hover{
+  color: white;
+  background-color: rgba(255, 255, 255, .075);
+  border-left: 3px solid #3b7ddd;
+}
+.custom-sidebar .offcanvas-body{
+  position: relative;
+}
+.menuLogo{
+  position: absolute;
+  bottom: 15px;
+  left: 0;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/*Login Form nad login Button*/
+.loginButton{
+  width: 75px;
+  background: #e30074 !important;
+  color: white !important;
+  left: 50%;
 }

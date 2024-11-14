@@ -1,21 +1,18 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import '../../App.css';
 
-const Table = ({ table, dbName, schema, jndiName, onTableClick, pageSize, page }) => {
-
-  console.log(table, dbName, schema, jndiName, onTableClick, pageSize, page);
-  
-
+const Table = ({ table, dbName, schema, jndiName, pageSize, page }) => {
+  //Az átadott propokat küldjuk a backendnek feldolgozásra
   return (
     <li className="sidebar-item">
-      <Button
-        variant="link"
-        className="sidebar-link clickable menuItems"
-        onClick={() => onTableClick({ dbName, table, schema, jndiName, page, pageSize } )}
+      <Link
+        to={`/abcMon/table/${table}`} 
+        state={{ dbName, table, schema, jndiName, page, pageSize }}
+        className="sidebar-link clickable menuItems ps-3"
       >
         {table}
-      </Button>
+      </Link>
     </li>
   );
 };

@@ -5,6 +5,7 @@ import './Pagination.css'; //
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
+  //Rákattintunk a kívánt oldalra
   const handleSelect = (selectedPage) => {
     onPageChange(selectedPage);
   };

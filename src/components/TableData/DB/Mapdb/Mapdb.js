@@ -44,13 +44,14 @@ const Mapdb = ({pageSize, page, setPage}) => {
   
     try {
       const response = await fetchData({
-        url: 'http://localhost:8080/abcMon/api/db/list',
-        //url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/list',
+        //URL localhost vagy websphere
+        //url: 'http://localhost:8080/abcMon/api/db/list',
+        url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/list',
         method: 'POST',
         data: dataToSend,
       });
   
-      // Unique keys extraction
+      // Egyedi kulcs tárolása tömben
       const keys = [];
       if (response && response.items) {
         response.items.forEach((item) => {
@@ -61,8 +62,7 @@ const Mapdb = ({pageSize, page, setPage}) => {
           });
         });
       }
-      console.log(response);
-      
+      //response state beállítása a visszakapott json adattal
       setResponse(response);
       setUniqueKeys(keys);
       // Status data mentése a ref-be
@@ -71,7 +71,7 @@ const Mapdb = ({pageSize, page, setPage}) => {
       console.error("Fetch hiba:", error);
     }
   };
-  
+  //Side effect a fetchre. /list ha nem aktív a keresési mód. Frissülés a page és pageSize statekre.
   useEffect(() => {
     if (!isSearching) {
       handleFetch();
@@ -81,7 +81,7 @@ const Mapdb = ({pageSize, page, setPage}) => {
   // Keresési funkció a /search végponthoz
   const handleSearch = async (uniqueKeys, searchInput) => {
     setIsSearching(true);
-    setPage(1); // kereséskor mindig az első oldalról kezdjük
+    setPage(1);
     
 
     const searchParams = {
@@ -99,8 +99,9 @@ const Mapdb = ({pageSize, page, setPage}) => {
 
     try {
       const searchResponse = await fetchData({
-        url: 'http://localhost:8080/abcMon/api/db/search',
-        //url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/search',
+        //URL localhost vagy websphere
+        //url: 'http://localhost:8080/abcMon/api/db/search',
+        url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/search',
         method: 'POST',
         data: searchParams,
       });
@@ -112,6 +113,11 @@ const Mapdb = ({pageSize, page, setPage}) => {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  // Ezzel frissítjük az adatokat
+  const handleRefresh = () => {
+    handleFetch(); 
   };
 
   return (
@@ -126,7 +132,7 @@ const Mapdb = ({pageSize, page, setPage}) => {
         response && (
           <>
           <Statusbar statusData={statusDataRef.current} progressbarColor={progressbarColor}/>
-          <Searchbar uniqueKeys={uniqueKeys} onSearch={handleSearch}/>
+          <Searchbar uniqueKeys={uniqueKeys} onSearch={handleSearch} onRefresh={handleRefresh}/>
           {response.totalItems > 0 ? (
 
           <Accordion defaultActiveKey="0" className="w-50">

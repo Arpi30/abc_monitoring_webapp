@@ -43,13 +43,13 @@
 .custom-sidebar .offcanvas-title {
   color: white; /* Fehér szín a címhez */
 }
-.sidebar-item button{
+.sidebar-item button, .sidebar-item a{
   color: white;
   text-decoration: none;
   width: 100%;
   text-align: justify;
 }
-.sidebar-item button:hover{
+.sidebar-item button:hover, .sidebar-item a:hover{
   color: white;
   background-color: rgba(255, 255, 255, .075);
   border-left: 3px solid #3b7ddd;

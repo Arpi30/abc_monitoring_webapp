@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import MenuComponent from './components/menu/MenuComponent';
 import './App.css';
-import {PaginationProvider} from './Functions/ContextAPI/PaginationContext/PaginationContext'
 
 const App = () => {
   const [lastClickedTable, setLastClickedTable] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [page, setPage] = useState(1)
+  const [showSidebar, setShowSidebar] = useState(false);          //sideBar state
+  const [page, setPage] = useState(1)                             //page State
 
   const handleSidebarToggle = () => setShowSidebar(!showSidebar);
 
+  //Menu objektum
   const menu = [
     {
       lpar: "SY27",
@@ -38,7 +38,7 @@ const App = () => {
   
 
   return (
-    <PaginationProvider>
+
       <BrowserRouter>
         <div className="App">
           <MenuComponent
@@ -53,7 +53,7 @@ const App = () => {
             />
         </div>
       </BrowserRouter>
-    </PaginationProvider>
+
   );
 };
 

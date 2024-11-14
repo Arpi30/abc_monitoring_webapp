@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+//Ellenőrzi hogy a kérés HTTPS és átváltja HTTP-re
 const checkProtocol = () => {
   const protocol = window.location.protocol;
   let href = window.location.href;

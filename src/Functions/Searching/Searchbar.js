@@ -31,7 +31,7 @@ const Searchbar = ({ uniqueKeys, onSearch, onRefresh  }) => {
   };
 
   return (
-    <div className="dropdown-container position-fixed p-2" style={{width: '18rem', border: "3px solid #e30074", right: "25px", top: "40%", borderRadius: "0.375rem"}}>
+    <div className="dropdown-container my-2 p-2" style={{width: '18rem', border: "3px solid #e30074", borderRadius: "0.375rem"}}>
       <div className="d-flex flex-row justify-content-between">
         <Dropdown className="text-start" onSelect={handleSelectChange}>
           <Dropdown.Toggle style={{backgroundColor: "#e30074", border: "none"}} id="dropdown-basic">

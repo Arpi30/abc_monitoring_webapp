@@ -16,7 +16,7 @@ const Statusbar = ({ statusData, progressbarColor }) => {
   };
 
   return (
-    <Card id="progressbarContainer" className="position-fixed top-10% p-2" style={{width: '18rem', border: "3px solid #e30074", right: "25px"}}>
+    <Card id="progressbarContainer" className="p-2" style={{width: '18rem', border: "3px solid #e30074"}}>
       {['RECA_STATUS', 'CPY1_STATUS', 'CPY2_STATUS'].map((statusType) => (
         <div key={statusType} className={`status-group bg-light bg-gradient p-2 rounded ${statusType === 'CPY2_STATUS' ? 'mb-0' : 'mb-2'}`}>
           <div className="status-label mb-2 text-start">

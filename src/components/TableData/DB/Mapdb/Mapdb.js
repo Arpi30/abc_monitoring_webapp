@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import useAxiosFetch from '../../../../Functions/FetchingData/Fetch'
-import { Spinner, ProgressBar, Accordion } from 'react-bootstrap';
+import { Spinner, ProgressBar, Accordion, Button, Table } from 'react-bootstrap';
 import Statusbar from './Statusbar';
 import Searchbar from '../../../../Functions/Searching/Searchbar'
 import Pagination from '../../../../Functions/Pagination/Pagination'
@@ -17,6 +17,8 @@ const Mapdb = ({pageSize, page, setPage}) => {
 
   // Ref a Statusbar állapotának tárolásához
   const statusDataRef = useRef(null);
+  const bottomRef = useRef(null);
+  const topRef = useRef(null);
 
   // Progressbar szín meghatározása
   const progressbarColor = (status) => {
@@ -120,125 +122,184 @@ const Mapdb = ({pageSize, page, setPage}) => {
     handleFetch(); 
   };
 
+  const scrollToBottom = () => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  const scrollToTop = () => {
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="mapdbContainer d-flex flex-column align-items-center py-2 position-relative">
+    <div ref={topRef} className="mapdbContainer d-flex flex-column align-items-center py-2 position-relative">
       {loading ? (
         <div className="d-flex justify-content-center mt-3">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-      </div>
-      ) : (
-        response && (
-          <>
-          <Statusbar statusData={statusDataRef.current} progressbarColor={progressbarColor}/>
-          <Searchbar uniqueKeys={uniqueKeys} onSearch={handleSearch} onRefresh={handleRefresh}/>
+        </div>
+      ) : response ? (
+        <div className="container d-flex flex-row-reverse">
           {response.totalItems > 0 ? (
-
-          <Accordion defaultActiveKey="0" className="w-50">
-            {response.items.map((item, index) => (
-              <Accordion.Item eventKey={index.toString()} key={index}>
-                <Accordion.Header>
-                  <span className="m-0 bg-light bg-gradient rounded d-inline px-2 py-1">
-                    NUMBER: {item.NUMBER}
-                  </span>
-                  <span className={`ms-2 bg-${progressbarColor(item.RECA_STATUS)}`} style={{ borderRadius: '50%', width: '5px', height: '5px', display: 'inline-block' }}></span>
-                  <span className={`ms-2 bg-${progressbarColor(item.CPY1_STATUS)}`} style={{ borderRadius: '50%', width: '5px', height: '5px', display: 'inline-block' }}></span>
-                  <span className={`ms-2 bg-${progressbarColor(item.CPY2_STATUS)}`} style={{ borderRadius: '50%', width: '5px', height: '5px', display: 'inline-block' }}></span>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <ul className="list-group list-group-flush">
-                    {/* RECA szekció */}
-                    <li className="list-group-item">
-                      <div className="d-flex flex-column">
-                        <div className="d-flex flex-row my-3 justify-content-evenly">
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Recall Status:</span>
-                            <span className="fw-bold fs-6">{item.RECA_STATUS}</span>
-                          </span>
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Number:</span>
-                            <span className="fw-bold fs-6">{item.NUMBER}</span>
-                          </span>
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Recall Time:</span>
-                            <span className="fw-bold fs-6">{item.RECA_TIME}</span>
-                          </span>
-                        </div>
-                        <ProgressBar
-                          now={100}
-                          variant={progressbarColor(item.RECA_STATUS)}
-                          label={item.RECA_STATUS}
-                        />
-                      </div>
-                    </li>
-                    {/* Copy 1 szekció */}
-                    <li className="list-group-item">
-                      <div className="d-flex flex-column">
-                        <div className="d-flex flex-row my-3 justify-content-evenly">
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Copy 1 Status:</span>
-                            <span className="fw-bold fs-6">{item.CPY1_STATUS}</span>
-                          </span>
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Copy 1 Net:</span>
-                            <span className="fw-bold fs-6">{item.CPY1_NET}</span>
-                          </span>
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Copy 1 Time:</span>
-                            <span className="fw-bold fs-6">{item.CPY1_TIME}</span>
-                          </span>
-                        </div>
-                        <ProgressBar
-                          now={100}
-                          variant={progressbarColor(item.CPY1_STATUS)}
-                          label={item.CPY1_STATUS}
-                        />
-                      </div>
-                    </li>
-                    {/* Copy 2 szekció */}
-                    <li className="list-group-item">
-                      <div className="d-flex flex-column">
-                        <div className="d-flex flex-row my-3 justify-content-evenly">
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Copy 2 Status:</span>
-                            <span className="fw-bold fs-6">{item.CPY2_STATUS}</span>
-                          </span>
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Copy 2 Net:</span>
-                            <span className="fw-bold fs-6">{item.CPY2_NET}</span>
-                          </span>
-                          <span className="fs-4">
-                            <span className="bg-light bg-gradient p-2 rounded fs-6">Copy 2 Time:</span>
-                            <span className="fw-bold fs-6">{item.CPY2_TIME}</span>
-                          </span>
-                        </div>
-                        <ProgressBar
-                          now={100}
-                          variant={progressbarColor(item.CPY2_STATUS)}
-                          label={item.CPY2_STATUS}
-                        />
-                      </div>
-                    </li>
-                  </ul>
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
-          </Accordion>
-          ) : (
-            <NoFoundData />
-          )}
-          <Pagination
-              currentPage={page}
-              totalPages={Math.ceil(response.totalItems / tableData.pageSize)}
-              onPageChange={setPage}
-            />
-          </>
-        )
-      )}
+            <div className="d-flex flex-column justify-content-between mx-2">
+              <div className="text-start">
+                <Button style={{backgroundColor: "#e30074", border: "none"}} onClick={scrollToBottom}>Down</Button>
+              </div>
+              <div className="text-start" style={{marginBottom: "1rem"}}>
+                <Button style={{backgroundColor: "#e30074", border: "none"}} onClick={scrollToTop}>Up</Button>
+              </div>
+            </div>
+          ) : null}
+          <div className="">
+            <div>
+              <Statusbar statusData={statusDataRef.current} progressbarColor={progressbarColor} />
+              <Searchbar uniqueKeys={uniqueKeys} onSearch={handleSearch} onRefresh={handleRefresh} />
+            </div>
+          </div>
+          <div className="w-100 d-flex flex-column align-items-center">
+            {response.totalItems > 0 ? (
+              <>
+                <Accordion defaultActiveKey="0" style={{width: "80%"}}>
+                  {response.items.map((item, index) => (
+                    <Accordion.Item eventKey={index.toString()} key={index}>
+                      <Accordion.Header>
+                        <span className="m-0 bg-light bg-gradient rounded d-inline px-2 py-1">
+                          NUMBER: {item.NUMBER}
+                        </span>
+                        <span
+                          className={`ms-2 bg-${progressbarColor(item.RECA_STATUS)}`}
+                          style={{
+                            borderRadius: '50%',
+                            width: '5px',
+                            height: '5px',
+                            display: 'inline-block',
+                          }}
+                        ></span>
+                        <span
+                          className={`ms-2 bg-${progressbarColor(item.CPY1_STATUS)}`}
+                          style={{
+                            borderRadius: '50%',
+                            width: '5px',
+                            height: '5px',
+                            display: 'inline-block',
+                          }}
+                        ></span>
+                        <span
+                          className={`ms-2 bg-${progressbarColor(item.CPY2_STATUS)}`}
+                          style={{
+                            borderRadius: '50%',
+                            width: '5px',
+                            height: '5px',
+                            display: 'inline-block',
+                          }}
+                        ></span>
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        <ul className="list-group list-group-flush">
+                          {/* RECA szekció */}
+                          <li className="list-group-item">
+                            <div className="d-flex flex-column">
+                              <Table striped borderless hover>
+                                <thead>
+                                  <tr>
+                                    <th>Recall Status</th>
+                                    <th>Number:</th>
+                                    <th>Recall Time:</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>{item.RECA_STATUS}</td>
+                                    <td>{item.NUMBER}</td>
+                                    <td>{item.RECA_TIME}</td>
+                                  </tr>
+                                </tbody>
+                              </Table>
+                              <ProgressBar
+                                now={100}
+                                variant={progressbarColor(item.RECA_STATUS)}
+                                label={item.RECA_STATUS}
+                              />
+                            </div>
+                          </li>
+                          {/* Copy 1 szekció */}
+                          <li className="list-group-item">
+                            <div className="d-flex flex-column">
+                              <Table striped borderless hover>
+                                <thead>
+                                  <tr>
+                                    <th>Copy 1 Status</th>
+                                    <th>Copy 1 Net</th>
+                                    <th>Copy 1 Time:</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>{item.CPY1_STATUS}</td>
+                                    <td>{item.CPY1_NET}</td>
+                                    <td>{item.CPY1_TIME}</td>
+                                  </tr>
+                                </tbody>
+                              </Table>
+                              <ProgressBar
+                                now={100}
+                                variant={progressbarColor(item.CPY1_STATUS)}
+                                label={item.CPY1_STATUS}
+                              />
+                            </div>
+                          </li>
+                          {/* Copy 2 szekció */}
+                          <li className="list-group-item">
+                            <div className="d-flex flex-column">
+                              <Table striped borderless hover>
+                                <thead>
+                                  <tr>
+                                    <th>Copy 2 Status</th>
+                                    <th>Copy 2 Net</th>
+                                    <th>Copy 2 Time</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>{item.CPY2_STATUS}</td>
+                                    <td>{item.CPY2_NET}</td>
+                                    <td>{item.CPY2_TIME}</td>
+                                  </tr>
+                                </tbody>
+                              </Table>
+                              <ProgressBar
+                                now={100}
+                                variant={progressbarColor(item.CPY2_STATUS)}
+                                label={item.CPY2_STATUS}
+                              />
+                            </div>
+                          </li>
+                        </ul>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  ))}
+                </Accordion>
+                <Pagination
+                  ref={bottomRef}
+                  currentPage={page}
+                  totalPages={Math.ceil(response.totalItems / tableData.pageSize)}
+                  onPageChange={setPage}
+                />
+              </>
+            ) : (
+              <NoFoundData />
+            )}
+          </div>
+        </div>
+      ) : null}
       {error && <p>Hiba történt: {error.message}</p>}
     </div>
   );
+  
+
 };
 
 export default Mapdb;

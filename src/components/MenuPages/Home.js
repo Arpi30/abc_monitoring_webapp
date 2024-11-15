@@ -18,7 +18,7 @@ const Home = () => {
             <div className="welcomeTextWrapper">
                 <svg>
                     <text className="welcomeText" x="35%" y="50%">
-                        ABC Monitoring ©
+                        ABCMon ©
                     </text>
                 </svg>
             </div>

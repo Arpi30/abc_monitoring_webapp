@@ -23,13 +23,13 @@ const App = () => {
               dbName: "MAPDB",
               jndiName: "jdbc/sy27conn.db",
               tables: ["Z00RCPY1"]
-            },
+            }/* ,
             {
               schema: "D$PZ01",
               dbName: "MAPDB2",
               jndiName: "jdbc/sy27conn.db",
               tables: ["Z00RCPY2"]
-            }
+            } */
           ]
         }
       ]

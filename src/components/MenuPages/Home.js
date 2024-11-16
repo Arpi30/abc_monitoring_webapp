@@ -16,17 +16,18 @@ const Home = () => {
     return (
         <div className="d-flex flex-column justify-content-center" style={{ height: "100%" }}>
             <div className="welcomeTextWrapper">
-                <svg>
-                    <text className="welcomeText" x="35%" y="50%">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                    <text className="welcomeText" x="50%" y="50%" dominantBaseline="middle" textAnchor="middle">
                         ABCMon ©
                     </text>
                 </svg>
             </div>
-            <div>
+            
+            {/* <div>
                 <Button className="loginButton" variant="light" onClick={handleLoginClick}>
                     Login
                 </Button>
-            </div>
+            </div> */}
 
             {/* Modal for LoginForm */}
             <Modal show={showModal} onHide={handleCloseModal} centered>

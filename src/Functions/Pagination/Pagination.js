@@ -2,13 +2,16 @@ import React, { forwardRef } from 'react';
 import { Pagination as BootstrapPagination } from 'react-bootstrap';
 import './Pagination.css';
 
-const Pagination = forwardRef(({ currentPage, totalPages, onPageChange, ...props }, ref) => {
+const Pagination = forwardRef(({ currentPage, totalPages, onPageChange }, ref) => {
   const handleSelect = (selectedPage) => {
-    onPageChange(selectedPage);
+    if (selectedPage !== currentPage) {
+      onPageChange(selectedPage);
+    }
   };
 
   const getPageItems = () => {
     const pageItems = [];
+    
 
     for (let i = 1; i <= Math.min(3, totalPages); i++) {
       pageItems.push(
@@ -58,7 +61,7 @@ const Pagination = forwardRef(({ currentPage, totalPages, onPageChange, ...props
   };
 
   return (
-    <BootstrapPagination {...props} ref={ref}>
+    <BootstrapPagination  ref={ref}>
       <BootstrapPagination.Prev
         onClick={() => handleSelect(Math.max(currentPage - 1, 1))}
         disabled={currentPage === 1}

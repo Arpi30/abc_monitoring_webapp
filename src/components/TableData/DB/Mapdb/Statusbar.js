@@ -15,12 +15,18 @@ const Statusbar = ({ statusData, progressbarColor }) => {
     return statusData[statusType][statusKey] || 0;
   };
 
+  const statusTypeDisplayName = {
+    RECA_STATUS: 'Recall Status',
+    CPY1_STATUS: 'DUMP Status',
+    CPY2_STATUS: 'RESTORE Status',
+  };
+
   return (
     <Card id="progressbarContainer" className="p-2" style={{width: '18rem', border: "3px solid #e30074"}}>
       {['RECA_STATUS', 'CPY1_STATUS', 'CPY2_STATUS'].map((statusType) => (
         <div key={statusType} className={`status-group bg-light bg-gradient p-2 rounded ${statusType === 'CPY2_STATUS' ? 'mb-0' : 'mb-2'}`}>
           <div className="status-label mb-2 text-start">
-            <span className="fw-bold">{statusType.replace('_', ' ')}</span>
+            <span className="fw-bold">{statusTypeDisplayName[statusType]}</span>
             <div className="d-flex flex-row justify-content-between">
                 <Badge style={{ fontSize: '10px' }} bg={progressbarColor('TBD ')}>TBD: {getStatusLabel(statusType, 'TBD')}</Badge>
                 <Badge style={{ fontSize: '10px' }} bg={progressbarColor('DONE')}>DONE: {getStatusLabel(statusType, 'DONE')}</Badge>

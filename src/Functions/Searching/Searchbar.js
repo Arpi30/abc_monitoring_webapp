@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown, Form, Button, InputGroup } from 'react-bootstrap';
 
 const Searchbar = ({ uniqueKeys, onSearch, onRefresh  }) => {
   const [selectedKey, setSelectedKey] = useState('');
   const [searchInput, setSearchInput] = useState('');
-
+  
   //Kiválasztott kulcs a keresési menűből
   const handleSelectChange = (key) => {
     setSelectedKey(key);
+    
   };
 
   //Input mező értékének a kinyerése
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-
+  
   //Keresés indítása
   const handleSearchClick = () => {
     console.log("Keresés indítása:", selectedKey, searchInput);
@@ -22,14 +23,15 @@ const Searchbar = ({ uniqueKeys, onSearch, onRefresh  }) => {
       onSearch(selectedKey, searchInput);
     }
   };
-
+  
   //A komponens újrabetöltése
   const handleRefreshClick = () => {
     if (onRefresh) {
       onRefresh(); 
     }
   };
-
+  //console.log(uniqueKeys);
+  
   return (
     <div className="dropdown-container my-2 p-2" style={{width: '18rem', border: "3px solid #e30074", borderRadius: "0.375rem"}}>
       <div className="d-flex flex-row justify-content-between">
@@ -40,8 +42,8 @@ const Searchbar = ({ uniqueKeys, onSearch, onRefresh  }) => {
 
           <Dropdown.Menu>
             {uniqueKeys.map((key) => (
-              <Dropdown.Item key={key} eventKey={key}>
-                {key}
+              <Dropdown.Item key={key.originalKey} eventKey={key.originalKey}>
+                {key.displayName}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>

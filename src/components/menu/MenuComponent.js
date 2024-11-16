@@ -35,7 +35,7 @@ const MenuComponent = ({ menu, handleSidebarToggle, showSidebar, setLastClickedT
           <Button variant="outline-light" onClick={handleSidebarToggle}>
             ☰
           </Button>
-          <Nav.Link className="text-light" onClick={handleHomeClick}>Home</Nav.Link>
+          <Nav.Link className="text-light home" onClick={handleHomeClick}>Home</Nav.Link>
           <Navbar.Brand className="text-light" bg="light" onClick={handleHomeClick}>ABCMon</Navbar.Brand>
         </Container>
       </Navbar>

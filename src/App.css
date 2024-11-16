@@ -2,34 +2,71 @@
   text-align: center;
   height: 100vh;
 }
-/*Welcome Text*/
-.welcomeTextWrapper{
+/* Welcome Text */
+.welcomeTextWrapper {
   background-color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;   /* Teljes képernyőszélesség */
   position: relative;
 }
-.welcomeTextWrapper svg{
-  width: 100%;
+
+.welcomeTextWrapper svg {
+  width: 50vw; /* Az SVG szélessége a képernyő méretéhez igazodik */
+  height: 30vh;
 }
-.welcomeText{
-  position: absolute;
-  font-weight: 600;
-  font-size: 4rem;
+
+.welcomeText {
+
+  font-size: 3vw; /* Reszponzív méret a képernyő szélességéhez igazítva */
   animation: stroke 5s infinite alternate;
   stroke: #e30074;
   fill: #e30074;
 }
+
 @keyframes stroke {
-	0%   {
-		fill: rgba(238,90,252,0); stroke: #e30074;
-		stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 2;
-	}
-	70%  {fill: rgba(238,90,252,0); stroke: #e30074; }
-	80%  {fill: rgba(238,90,252,0); stroke: #e30074; stroke-width: 3; }
-	100% {
-		fill: #e30074; stroke: rgba(238,90,252,0);
-		stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
-	}
+  0% {
+    fill: rgba(238, 90, 252, 0);
+    stroke: #e30074;
+    stroke-dashoffset: 25%;
+    stroke-dasharray: 0 50%;
+    stroke-width: 1;
+  }
+  70% {
+    fill: rgba(238, 90, 252, 0);
+    stroke: #e30074;
+  }
+  80% {
+    fill: rgba(238, 90, 252, 0);
+    stroke: #e30074;
+    stroke-width: 1;
+  }
+  100% {
+    fill: #e30074;
+    stroke: rgba(238, 90, 252, 0);
+    stroke-dashoffset: -25%;
+    stroke-dasharray: 50% 0;
+    stroke-width: 0;
+  }
 }
+
+/* Média-lekérdezés kisebb képernyőkhöz */
+@media (max-width: 768px) {
+  .welcomeText {
+    font-size: 3vw; /* A szöveg nagyobb a kisebb képernyőkhöz viszonyítva */
+  }
+}
+
+@media (max-width: 480px) {
+  .welcomeTextWrapper svg{
+    width: 100vw;
+  }
+  .welcomeText {
+    font-size: 6vw; /* Nagyobb szöveg a telefonok számára */
+  }
+}
+
 /*Sidebar css*/
 .custom-sidebar .offcanvas {
   background-color: #e30074; /* Magenta szín a sidebarhoz */
@@ -69,4 +106,24 @@
   background: #e30074 !important;
   color: white !important;
   left: 50%;
+}
+
+
+/*Home menu link*/
+
+@media (max-width: 480px){
+  a.home{
+    display: none;
+  }
+}
+
+
+/*Mapdb Component*/
+@media (max-width: 768px) {
+  .scrollUpAndDown .scrollDown, .scrollUpAndDown .scrollUp {
+    display: none;
+  }
+  .mapdbContainer{
+    flex-direction: column !important;
+  }
 }

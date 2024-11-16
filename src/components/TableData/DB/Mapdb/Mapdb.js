@@ -13,12 +13,25 @@ const Mapdb = ({pageSize, page, setPage}) => {
   const tableData = location.state;
   const [response, setResponse] = useState(null);
   const [uniqueKeys, setUniqueKeys] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-
+  
   // Ref a Statusbar állapotának tárolásához
   const statusDataRef = useRef(null);
   const bottomRef = useRef(null);
   const topRef = useRef(null);
+
+  //Key objektum a Dropdown menűhöz
+  const keyMappings = {
+    RECA_TIME: "Recall Time",
+    NUMBER: "Recall Package",
+    RECA_STATUS: "Recall Status",
+    RECA_NET: "Recall Net",
+    CPY1_TIME: "Dump Time",
+    CPY1_NET: "Dump Net",
+    CPY1_STATUS: "Dump Status",
+    CPY2_TIME: "Restore Time",
+    CPY2_NET: "Restore Net",
+    CPY2_STATUS: "Restore Status",
+  };
 
   // Progressbar szín meghatározása
   const progressbarColor = (status) => {
@@ -31,7 +44,6 @@ const Mapdb = ({pageSize, page, setPage}) => {
     // Alapértelmezett szín, ha nincs ilyen státusz
     return statusColors[status] || 'primary'; 
   };
-
   
   //Lekérés a /list útvonalon
   const handleFetch = async () => {
@@ -47,12 +59,13 @@ const Mapdb = ({pageSize, page, setPage}) => {
     try {
       const response = await fetchData({
         //URL localhost vagy websphere
-        //url: 'http://localhost:8080/abcMon/api/db/list',
-        url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/list',
+        url: 'http://localhost:8080/abcMon/api/db/list',
+        //url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/list',
         method: 'POST',
         data: dataToSend,
       });
-  
+      console.log("Mapdb Component: Start fetchData");
+      
       // Egyedi kulcs tárolása tömben
       const keys = [];
       if (response && response.items) {
@@ -64,28 +77,27 @@ const Mapdb = ({pageSize, page, setPage}) => {
           });
         });
       }
+
+      const readableKeys = keys.map((key) => ({
+        originalKey: key,
+        displayName: keyMappings[key] || key, // Ha nincs mapping, marad az eredeti kulcs
+      }));
+
       //response state beállítása a visszakapott json adattal
       setResponse(response);
-      setUniqueKeys(keys);
+      setUniqueKeys(readableKeys);
       // Status data mentése a ref-be
       statusDataRef.current = response.statusCounts;
     } catch (error) {
-      console.error("Fetch hiba:", error);
+      console.error("Fetch failure:", error);
     }
   };
   //Side effect a fetchre. /list ha nem aktív a keresési mód. Frissülés a page és pageSize statekre.
-  useEffect(() => {
-    if (!isSearching) {
-      handleFetch();
-    }
-  }, [page, pageSize]);
+ 
 
   // Keresési funkció a /search végponthoz
   const handleSearch = async (uniqueKeys, searchInput) => {
-    setIsSearching(true);
-    setPage(1);
-    
-
+    setPage(1)
     const searchParams = {
       jndiName: tableData.jndiName,
       selectedDropdown: uniqueKeys,
@@ -97,30 +109,24 @@ const Mapdb = ({pageSize, page, setPage}) => {
       pageSize: pageSize,
     };
 
-    console.log("Keresési paraméterek:", searchParams);
-
     try {
       const searchResponse = await fetchData({
         //URL localhost vagy websphere
-        //url: 'http://localhost:8080/abcMon/api/db/search',
-        url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/search',
+        url: 'http://localhost:8080/abcMon/api/db/search',
+        //url: 'http://w3xzea1.mf.corpintra.net/abcMon/api/db/search',
         method: 'POST',
         data: searchParams,
       });
-      console.log("Keresési találatok:",searchResponse);
       
       setResponse(searchResponse);
     } catch (error) {
       console.error("Search hiba:", error);
-    } finally {
-      setIsSearching(false);
     }
   };
 
-  // Ezzel frissítjük az adatokat
-  const handleRefresh = () => {
-    handleFetch(); 
-  };
+  useEffect(() => {
+    handleFetch();
+  }, [page, pageSize]);
 
   const scrollToBottom = () => {
     if (bottomRef.current) {
@@ -132,7 +138,7 @@ const Mapdb = ({pageSize, page, setPage}) => {
       topRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
+  
   return (
     <div ref={topRef} className="mapdbContainer d-flex flex-column align-items-center py-2 position-relative">
       {loading ? (
@@ -142,39 +148,39 @@ const Mapdb = ({pageSize, page, setPage}) => {
           </Spinner>
         </div>
       ) : response ? (
-        <div className="container d-flex flex-row-reverse">
+        <div className="container d-flex flex-column flex-md-row-reverse mapdbContainer m-0 m-lg-auto">
           {response.totalItems > 0 ? (
-            <div className="d-flex flex-column justify-content-between mx-2">
+            <div className="d-flex flex-column justify-content-between mx-2 scrollUpAndDown">
               <div className="text-start">
-                <Button style={{backgroundColor: "#e30074", border: "none"}} onClick={scrollToBottom}>Down</Button>
+                <Button className="scrollDown" style={{backgroundColor: "#e30074", border: "none"}} onClick={scrollToBottom}>Down</Button>
               </div>
               <div className="text-start" style={{marginBottom: "1rem"}}>
-                <Button style={{backgroundColor: "#e30074", border: "none"}} onClick={scrollToTop}>Up</Button>
+                <Button className="scrollUp" style={{backgroundColor: "#e30074", border: "none"}} onClick={scrollToTop}>Up</Button>
               </div>
             </div>
           ) : null}
           <div className="">
             <div>
               <Statusbar statusData={statusDataRef.current} progressbarColor={progressbarColor} />
-              <Searchbar uniqueKeys={uniqueKeys} onSearch={handleSearch} onRefresh={handleRefresh} />
+              <Searchbar uniqueKeys={uniqueKeys} onSearch={handleSearch} onRefresh={handleFetch} />
             </div>
           </div>
           <div className="w-100 d-flex flex-column align-items-center">
             {response.totalItems > 0 ? (
               <>
-                <Accordion defaultActiveKey="0" style={{width: "80%"}}>
+                <Accordion defaultActiveKey="0" className="w-100 px-2">
                   {response.items.map((item, index) => (
                     <Accordion.Item eventKey={index.toString()} key={index}>
                       <Accordion.Header>
                         <span className="m-0 bg-light bg-gradient rounded d-inline px-2 py-1">
-                          NUMBER: {item.NUMBER}
+                          RECALL package: {item.NUMBER}
                         </span>
                         <span
                           className={`ms-2 bg-${progressbarColor(item.RECA_STATUS)}`}
                           style={{
                             borderRadius: '50%',
-                            width: '5px',
-                            height: '5px',
+                            width: '8px',
+                            height: '8px',
                             display: 'inline-block',
                           }}
                         ></span>
@@ -182,8 +188,8 @@ const Mapdb = ({pageSize, page, setPage}) => {
                           className={`ms-2 bg-${progressbarColor(item.CPY1_STATUS)}`}
                           style={{
                             borderRadius: '50%',
-                            width: '5px',
-                            height: '5px',
+                            width: '8px',
+                            height: '8px',
                             display: 'inline-block',
                           }}
                         ></span>
@@ -191,8 +197,8 @@ const Mapdb = ({pageSize, page, setPage}) => {
                           className={`ms-2 bg-${progressbarColor(item.CPY2_STATUS)}`}
                           style={{
                             borderRadius: '50%',
-                            width: '5px',
-                            height: '5px',
+                            width: '8px',
+                            height: '8px',
                             display: 'inline-block',
                           }}
                         ></span>
@@ -205,15 +211,15 @@ const Mapdb = ({pageSize, page, setPage}) => {
                               <Table striped borderless hover>
                                 <thead>
                                   <tr>
-                                    <th>Recall Status</th>
-                                    <th>Number:</th>
-                                    <th>Recall Time:</th>
+                                    <th>RECALL Status</th>
+                                    <th>RECALL Net:</th>
+                                    <th>RECALL Time:</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
                                     <td>{item.RECA_STATUS}</td>
-                                    <td>{item.NUMBER}</td>
+                                    <td>{item.RECA_NET}</td>
                                     <td>{item.RECA_TIME}</td>
                                   </tr>
                                 </tbody>
@@ -231,9 +237,9 @@ const Mapdb = ({pageSize, page, setPage}) => {
                               <Table striped borderless hover>
                                 <thead>
                                   <tr>
-                                    <th>Copy 1 Status</th>
-                                    <th>Copy 1 Net</th>
-                                    <th>Copy 1 Time:</th>
+                                    <th>DUMP Status</th>
+                                    <th>DUMP Net</th>
+                                    <th>DUMP Time:</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -257,9 +263,9 @@ const Mapdb = ({pageSize, page, setPage}) => {
                               <Table striped borderless hover>
                                 <thead>
                                   <tr>
-                                    <th>Copy 2 Status</th>
-                                    <th>Copy 2 Net</th>
-                                    <th>Copy 2 Time</th>
+                                    <th>RESTORE Status</th>
+                                    <th>RESTORE Net</th>
+                                    <th>RESTORE Time</th>
                                   </tr>
                                 </thead>
                                 <tbody>

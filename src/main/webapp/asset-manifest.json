@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/abcMon/static/css/main.e8e99dc2.css",
+    "main.js": "/abcMon/static/js/main.e95e8daf.js",
+    "static/media/nofoundimg.jpg": "/abcMon/static/media/nofoundimg.836b33f78dee3aebffa0.jpg",
+    "static/media/networkError.jpg": "/abcMon/static/media/networkError.353972cc11bd56346411.jpg",
+    "index.html": "/abcMon/index.html",
+    "main.e8e99dc2.css.map": "/abcMon/static/css/main.e8e99dc2.css.map",
+    "main.e95e8daf.js.map": "/abcMon/static/js/main.e95e8daf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e8e99dc2.css",
+    "static/js/main.e95e8daf.js"
+  ]
+}
